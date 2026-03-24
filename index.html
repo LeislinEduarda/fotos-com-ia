@@ -1,1 +1,568 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <link rel="preconnect" href="https://lastlink.com">
+  <link rel="dns-prefetch" href="//lastlink.com">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Método Clone Digital de Conteúdo</title>
 
+  <style>
+    :root {
+      --bg: #f7f7f8;
+      --surface: #ffffff;
+      --surface-soft: #f0f0f2;
+      --text: #1f1f1f;
+      --muted: #6b6f76;
+      --border: #e5e7eb;
+      --accent: #16a34a;
+      --accent-hover: #15803d;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.04);
+      --radius: 18px;
+      --max: 760px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .page {
+      min-height: 100vh;
+      padding: 20px 16px 56px;
+    }
+
+    .container {
+      max-width: var(--max);
+      margin: 0 auto;
+    }
+
+    .hero {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 26px 20px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(1.95rem, 7vw, 3.3rem);
+      line-height: 1.04;
+      letter-spacing: -0.05em;
+      font-weight: 700;
+    }
+
+    .subheadline {
+      margin: 0;
+      font-size: 0.98rem;
+      line-height: 1.45;
+      color: var(--muted);
+      max-width: 62ch;
+    }
+
+    .hero-image {
+      display: block;
+      width: auto;
+      max-width: 100%;
+      height: auto;
+      max-height: 250px;
+      margin: 16px auto 18px;
+      border: none;
+      background: transparent;
+      box-shadow: none;
+      border-radius: 0;
+    }
+
+    .cta-wrap {
+      margin-top: 18px;
+    }
+
+    .cta-stack {
+      display: grid;
+      gap: 10px;
+    }
+
+    .price-line {
+      text-align: center;
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .price-line span {
+      display: block;
+      font-weight: 500;
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-top: 2px;
+    }
+
+    .sub-gancho {
+      text-align: center;
+      font-size: 0.97rem;
+      color: var(--text);
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    .cta {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      text-align: center;
+      text-decoration: none;
+      background: var(--accent);
+      color: #ffffff;
+      padding: 16px 18px;
+      border-radius: 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+      box-shadow: 0 6px 20px rgba(17, 17, 17, 0.12);
+    }
+
+    .cta:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .section {
+      display: grid;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 22px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    }
+
+    .card h2 {
+      margin: 0 0 14px;
+      font-size: 1.22rem;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+
+    .card h3 {
+      margin: 18px 0 8px;
+      font-size: 1.02rem;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+    }
+
+    .card p {
+      margin: 0 0 14px;
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .highlight {
+      font-weight: 700;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 18px 0;
+    }
+
+    .steps {
+      display: grid;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .step {
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .step-number {
+      display: inline-block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .step h3 {
+      margin: 0 0 8px;
+      font-size: 1.03rem;
+    }
+
+    .step p {
+      margin: 0;
+      color: var(--text);
+    }
+
+    .list-block {
+      margin-top: 16px;
+    }
+
+    .list-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin: 0 0 10px;
+    }
+
+    .clean-list {
+      margin: 0;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .clean-list li {
+      margin: 0 0 8px;
+      color: var(--text);
+    }
+
+    .final {
+      margin-top: 18px;
+      background: linear-gradient(180deg, #ffffff 0%, #f9f9fa 100%);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 28px 22px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .final p {
+      margin: 0 0 18px;
+      font-size: 1.08rem;
+      line-height: 1.5;
+    }
+
+    @media (min-width: 768px) {
+      .page {
+        padding-top: 28px;
+      }
+
+      .hero,
+      .card,
+      .final {
+        padding: 34px;
+      }
+
+      .hero-image {
+        height: 260px;
+        margin: 18px 0 20px;
+      }
+
+      .section {
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="container">
+
+      <section class="hero">
+        <h1>Criei meu próprio banco de fotos com meu rosto usando IA e nunca mais fiquei sem foto para postar</h1>
+
+        <p class="subheadline">
+          Pare de repetir a mesma foto 1000x e aprenda comigo a criar um banco infinito de fotos com o seu rosto para os seus posts.
+        </p>
+
+        <!-- Troque o src pela sua imagem do hero -->
+        <img
+          src="heroimg.webp"
+          alt="Método Clone Digital de Conteúdo"
+          class="hero-image"
+        >
+
+        <div class="cta-wrap">
+          <div class="cta-stack">
+            <div class="price-line">
+              11x de R$ 6,50 ou R$ 57 à vista
+              <span>Acesso imediato. Em cerca de 35 minutos, você já tem tudo para começar.</span>
+            </div>
+
+            <a
+              href="https://lastlink.com/p/C45C1960D/checkout-payment"
+              class="cta"
+            >
+              Quero criar meu banco de fotos
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+
+        <article class="card">
+          <h2>Eu uso a IA para criar fotos minhas que parecem reais</h2>
+
+          <p>Em cenários novos.</p>
+          <p>Com roupas novas.</p>
+          <p>Com poses novas.</p>
+          <p>Com expressões diferentes.</p>
+          <p>Então continua sendo <span class="highlight">fotos minhas</span>, mas sem ficar presa ao meu guarda-roupa, ao lugar onde eu estou, ao meu humor no dia ou aos equipamentos que eu tenho.</p>
+          <p class="highlight">ISSO ME DEIXA LIVRE.</p>
+          <p>Livre para usar a minha criatividade e pedir fotos novas do jeito que eu quiser, sem depender de tirar foto toda vez que eu preciso postar.</p>
+          <p>E o melhor: <span class="highlight">sem perder a semelhança comigo.</span></p>
+          <p><span class="highlight">Sério. Até minha vó acha que sou eu.</span></p>
+
+          <div class="divider"></div>
+
+          <p class="sub-gancho">
+            Você para de depender de ensaio, look, cenário e disposição toda vez que precisa postar.
+          </p>
+
+          <div class="cta-wrap">
+            <div class="cta-stack">
+              <div class="price-line">
+                11x de R$ 6,50 ou R$ 57 à vista
+                <span>Acesso imediato. Em cerca de 35 minutos, você já tem tudo para começar.</span>
+              </div>
+
+              <a
+                href="https://lastlink.com/p/C45C1960D/checkout-payment"
+                class="cta"
+              >
+                Quero criar meu banco de fotos
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h2>Tá, mas como isso funciona?</h2>
+
+          <div class="steps">
+            <div class="step">
+              <span class="step-number">Primeiro</span>
+              <h3>Você cria uma versão sua que realmente parece com você</h3>
+              <p>Não é para ter uma foto bonita e só. É para ter uma base boa o suficiente para gerar várias outras fotos sem deixar de parecer você.</p>
+            </div>
+
+            <div class="step">
+              <span class="step-number">Depois</span>
+              <h3>Essa foto deixa de ser uma foto solta e vira um banco de fotos</h3>
+              <p>Você consegue criar novas imagens com o seu rosto em cenários diferentes, com roupas diferentes, poses diferentes e expressões diferentes sem começar do zero toda vez.</p>
+            </div>
+
+            <div class="step">
+              <span class="step-number">E aí</span>
+              <h3>Esse banco começa a alimentar os seus posts</h3>
+              <p>Com fotos que você nunca conseguiria fazer sozinha, com mais liberdade criativa e muito menos dependência de tirar foto toda semana.</p>
+            </div>
+          </div>
+
+          <div class="cta-wrap">
+            <div class="cta-stack">
+              <div class="price-line">
+                11x de R$ 6,50 ou R$ 57 à vista
+                <span>Acesso imediato. Em cerca de 35 minutos, você já tem tudo para começar.</span>
+              </div>
+
+              <a
+                href="https://lastlink.com/p/C45C1960D/checkout-payment"
+                class="cta"
+              >
+                Quero criar meu banco de fotos
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h2>O que você vai aprender aqui</h2>
+
+          <div class="list-block">
+            <p class="list-title">Para começar</p>
+            <ul class="clean-list">
+              <li><strong>✔ Os nossos combinados oficiais</strong> para as suas fotos ficarem mais bonitas, mais parecidas com você e mais fáceis de usar depois.</li>
+              <li><strong>✔ Como pensar na foto antes de criar</strong> para não sair gerando imagem aleatória que depois nem serve para os seus posts.</li>
+              <li><strong>✔ A ferramenta que eu uso</strong> para criar as fotos.</li>
+              <li><strong>✔ O passo a passo para criar suas fotos com IA.</strong></li>
+              <li><strong>✔ Como eu ajusto as minhas fotos</strong> quando o resultado não vem certo de primeira.</li>
+            </ul>
+          </div>
+
+          <div class="list-block">
+            <p class="list-title">Para multiplicar suas fotos</p>
+            <ul class="clean-list">
+              <li><strong>✔ Como criar ângulos diferentes</strong> a partir da mesma foto.</li>
+              <li><strong>✔ Como mudar as expressões</strong> para não ficar sempre com a mesma cara.</li>
+              <li><strong>✔ Como trocar roupas e acessórios</strong> na imagem.</li>
+              <li><strong>✔ Como colocar texto em português</strong> nas suas fotos com IA.</li>
+            </ul>
+          </div>
+
+          <div class="list-block">
+            <p class="list-title">Para usar nos seus posts</p>
+            <ul class="clean-list">
+              <li><strong>✔ Os melhores lugares para usar suas fotos</strong> no conteúdo, nos posts, nas capas, nas páginas e em outros lugares da sua presença online.</li>
+              <li><strong>✔ 50 ideias de fotos</strong> para criar com IA.</li>
+              <li><strong>✔ 21 ideias de fotos de perfil.</strong></li>
+              <li><strong>✔ 85 comandos prontos</strong> de roupas e acessórios.</li>
+              <li><strong>✔ A lógica da primeira foto do carrossel</strong> e por que ela importa mais do que parece.</li>
+            </ul>
+          </div>
+
+          <div class="divider"></div>
+
+          <p class="sub-gancho">
+            É um método prático e direto ao ponto: você entra, entende como funciona, cria sua base e começa a montar seu banco de fotos sem transformar isso em mais uma complicação na sua rotina.
+          </p>
+        </article>
+
+        <article class="card">
+          <h2>Em cerca de 35 minutos, você já consegue começar</h2>
+
+          <div class="steps">
+            <div class="step">
+              <span class="step-number">Hoje</span>
+              <h3>Você entra e entende a lógica</h3>
+              <p>sem precisar virar especialista em IA e sem complicar o processo.</p>
+            </div>
+
+            <div class="step">
+              <span class="step-number">Ainda hoje</span>
+              <h3>Você cria a sua base</h3>
+              <p>com uma versão sua que realmente parece com você.</p>
+            </div>
+
+            <div class="step">
+              <span class="step-number">Depois</span>
+              <h3>Você começa a multiplicar suas fotos</h3>
+              <p>mudando cenário, roupa, pose, expressão e contexto sem começar do zero.</p>
+            </div>
+
+            <div class="step">
+              <span class="step-number">Na prática</span>
+              <h3>Seu conteúdo passa a ter um banco de imagens próprio</h3>
+              <p>para feed, capas, páginas, produtos, área de membros e outros lugares da sua presença online.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h2>O que mais me perguntam antes de garantir</h2>
+
+          <h3>Isso vai parecer comigo mesmo?</h3>
+          <p>Sim. A ideia é justamente criar fotos que pareçam você de verdade, não uma versão aleatória sua.</p>
+
+          <h3>Eu preciso entender de IA para conseguir fazer?</h3>
+          <p>Não. Você não precisa entender de IA nem virar especialista em ferramenta para conseguir fazer isso.</p>
+
+          <h3>Eu vou conseguir criar fotos diferentes ou vai ficar tudo igual?</h3>
+          <p>Vai conseguir criar fotos diferentes, sim. Você aprende a mudar ângulos, expressões, roupas, acessórios, contexto e estilo para não ficar sempre com a mesma cara de imagem.</p>
+
+          <h3>Eu posso usar essas fotos em mais lugares além do feed?</h3>
+          <p>Sim. Você pode usar no feed, em capas, páginas, área de membros, produtos, materiais de divulgação e em outros lugares do seu conteúdo.</p>
+
+          <h3>Em quanto tempo eu começo a usar?</h3>
+          <p>É um método bem direto ao ponto. A ideia é que você entre, entenda como funciona e já comece a montar sua base sem transformar isso em mais uma coisa pesada na sua rotina.</p>
+
+          <h3>E se eu entrar e sentir que não era para mim?</h3>
+          <p>Você tem <span class="highlight">15 dias de garantia incondicional</span>. Se sentir que o curso não te ajudou a criar o seu banco de fotos com o seu rosto, é só cancelar dentro desse prazo.</p>
+        </article>
+
+        <article class="card">
+          <h2>Seu acesso ao Método Clone Digital de Conteúdo</h2>
+
+          <p class="highlight">11x de R$ 6,50 ou R$ 57 à vista</p>
+
+          <div class="list-block">
+            <ul class="clean-list">
+              <li>✔ Acesso imediato</li>
+              <li>✔ Acesso vitalício</li>
+              <li>✔ Atualizações incluídas</li>
+              <li>✔ Garantia incondicional de 15 dias</li>
+            </ul>
+          </div>
+
+          <p><span class="highlight">Acesso imediato. Em cerca de 35 minutos, você já tem tudo para começar a montar seu banco de fotos com o seu rosto usando IA.</span></p>
+          <p>Você pode entrar hoje, assistir tudo em cerca de 35 minutos e já começar a aplicar ainda hoje.</p>
+
+          <div class="divider"></div>
+
+          <h3>Seu risco é zero</h3>
+          <p>Se você entrar, aplicar e sentir que o <span class="highlight">Método Clone Digital de Conteúdo</span> não te ajudou a montar seu banco de fotos com o seu rosto, é só cancelar dentro de 15 dias.</p>
+
+          <div class="cta-wrap">
+            <div class="cta-stack">
+              <div class="price-line">
+                11x de R$ 6,50 ou R$ 57 à vista
+                <span>Acesso imediato. Em cerca de 35 minutos, você já tem tudo para começar.</span>
+              </div>
+
+              <a
+                href="https://lastlink.com/p/C45C1960D/checkout-payment"
+                class="cta"
+              >
+                Quero criar meu banco de fotos
+              </a>
+            </div>
+          </div>
+        </article>
+
+      </section>
+
+      <section class="final" id="comprar">
+        <p>
+          <strong>Crie seu banco de fotos com IA hoje</strong><br>
+          Entre agora, monte sua base e pare de depender de tirar foto toda vez que precisa postar.
+        </p>
+
+        <div class="cta-stack">
+          <div class="price-line">
+            11x de R$ 6,50 ou R$ 57 à vista
+            <span>Acesso imediato. Em cerca de 35 minutos, você já tem tudo para começar.</span>
+          </div>
+
+          <div class="list-block" style="text-align:left;">
+            <ul class="clean-list">
+              <li>✔ Acesso imediato</li>
+              <li>✔ Acesso vitalício</li>
+              <li>✔ Atualizações incluídas</li>
+              <li>✔ Garantia incondicional de 15 dias</li>
+            </ul>
+          </div>
+
+          <a
+            href="https://lastlink.com/p/C45C1960D/checkout-payment"
+            class="cta"
+          >
+            Quero criar meu banco de fotos
+          </a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</body>
+</html>
